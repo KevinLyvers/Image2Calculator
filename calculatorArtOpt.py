@@ -1,7 +1,7 @@
-from PIL import Image
-import pygame
 import os
 import sys
+import pygame
+from PIL import Image
 
 def get_path(filename):
     if hasattr(sys, "_MEIPASS"):
@@ -9,8 +9,25 @@ def get_path(filename):
     else:
         return filename
 
+def colored(r, g, b, text):
+    return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
+
+def optionHandler(options):
+    if "help" in options:
+        print(colored(255,0,0,"\nPossible Modifications:"))
+        print(colored(0,255,0,"   is = \"1 or 0\" 1 enables visualizer"))
+        print(colored(0,255,0,"   *space multiple modifications with a siingle space*"))
+        print("\n")
+        return 0
+    return 1
+
 def main():
-    filename = input('Please enter your name: ')
+    filename = input('Enter name of image: ')
+    
+    while 1:
+        options = input('Enter any modifications(or "help"): ')
+        if optionHandler(options):
+            break
     
     #"test.PNG" ###"USA.png","IMG_7391.JPG","kevin.jpeg"
     filename = get_path(filename)
@@ -70,9 +87,13 @@ def test(input_array):
     else:
         outputLines = horLines
 
-    for i in outputLines:
-        print(i)
+    f = open("calcOutput.txt", "w")
+    
 
+    for i in outputLines:
+        f.write(str(i))
+    f.close()
+        
     if visualize:
         visualizer(colorArray)
 
