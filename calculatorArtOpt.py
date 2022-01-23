@@ -12,13 +12,21 @@ def get_path(filename):
 def colored(r, g, b, text):
     return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
+def optionSlicer(options):
+    optionsArray = options.split(" ") 
+    for i in optionsArray:
+        if "vis" in i:
+            global visualize
+            visualize = True
+
 def optionHandler(options):
     if "help" in options:
         print(colored(255,0,0,"\nPossible Modifications:"))
-        print(colored(0,255,0,"   is = \"1 or 0\" 1 enables visualizer"))
+        print(colored(0,255,0,"   vis = \"1 or 0\" 1 enables visualizer"))
         print(colored(0,255,0,"   *space multiple modifications with a siingle space*"))
         print("\n")
         return 0
+    optionSlicer(options)
     return 1
 
 def main():
@@ -90,8 +98,8 @@ def test(input_array):
     f = open("calcOutput.txt", "w")
     
 
-    for i in outputLines:
-        f.write(str(i))
+    for i in range(1,len(outputLines)):
+        f.write(str(outputLines[i]))
     f.close()
         
     if visualize:
@@ -110,14 +118,14 @@ def findLineHor(colorArray):
                     lastOne=(i*width)+j
                 if (j==width-1) or (colorArray[(i*width)+j+1]==0): ###last one is black in a row
                     if(j-(lastOne%width)>1):
-                        outputArray.append("For(X,"+str(lastOne%width)+","+str(j)+")\nPxl-On("+str(i)+",X)\nEnd")
+                        outputArray.append("For(X,"+str(lastOne%width)+","+str(j)+")\nPxl-On("+str(i)+",X)\nEnd\n")
                         lines+=3
                     else:
                         for n in range(j-(lastOne%width)+1):
-                            outputArray.append("Pxl-On("+str(i)+","+str((lastOne%width)+n)+")")
+                            outputArray.append("Pxl-On("+str(i)+","+str((lastOne%width)+n)+")\n")
                         lines+=j-(lastOne%width)+1
                     lastOne=-1
-    outputArray.insert(0,lines)
+    outputArray.insert(0,str(lines)+"\n")
     return outputArray
 
 def findLineVert(colorArray):
@@ -132,14 +140,14 @@ def findLineVert(colorArray):
                     lastOne=(j*width)+i
                 if (j==height-1) or (colorArray[((j+1)*width)+i]==0): ###last one is black in a row
                     if(j-(int(lastOne/width))>1):
-                        outputArray.append("For(X,"+str(int(lastOne/width))+","+str(j)+")\nPxl-On(X,"+str(lastOne%width)+",BLACK)\nEnd")
+                        outputArray.append("For(X,"+str(int(lastOne/width))+","+str(j)+")\nPxl-On(X,"+str(lastOne%width)+",BLACK)\nEnd\n")
                         lines+=3
                     else:
                         for n in range(j-(int(lastOne/width))+1):
-                            outputArray.append("Pxl-On("+str(int((lastOne/width)+n))+","+str(i)+",BLACK)")
+                            outputArray.append("Pxl-On("+str(int((lastOne/width)+n))+","+str(i)+",BLACK)\n")
                         lines+=j-(int(lastOne/width))+1
                     lastOne=-1
-    outputArray.insert(0,lines)
+    outputArray.insert(0,str(lines)+"\n")
     return outputArray
 
 def closeTwoColors(input_color): ###finds black or white pixel
