@@ -12,12 +12,15 @@ def get_path(filename): ###helper function to read file while EXE
 def colored(r, g, b, text): ###print color text to terminal
     return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
 
-def optionSlicer(options): ###experimental option slicer
-    optionsArray = options.split(" ") 
-    for i in optionsArray:
-        if "vis" in i:
-            global visualize
-            visualize = True
+def optionSlicer(options): ###experimental option slicer Takes in option=value
+    i = options.split("=") 
+    
+    if "vis" in i[0] and "1" in i[1]:
+        global visualize
+        visualize = True
+    if "bri" in i[0]:
+        global brightnessValue
+        brightnessValue = int(i[1])
 
 def optionHandler(options): ###experimental option handler
     if "help" in options:
@@ -25,8 +28,10 @@ def optionHandler(options): ###experimental option handler
         print(colored(0,255,0,"   vis = \"1 or 0\" 1 enables visualizer"))
         print(colored(0,255,0,"   *space multiple modifications with a siingle space*"))
         print("\n")
-        return 0
-    optionSlicer(options)
+        return 1
+    
+    for thing in options.split(" "):
+        optionSlicer(thing)
     return 1
 
 def main():
@@ -148,10 +153,10 @@ def closeTwoColors(input_color): ###finds black or white pixel
     col0 = input_color[0]
     col1 = input_color[1]
     col2 = input_color[2]
+    global brightnessValue
 
     brightness = (col0+col1+col2)/3
-
-    if(brightness>100):
+    if(brightness>brightnessValue):
         return(255,255,255)
     else:
         return(0,0,0)
@@ -159,5 +164,7 @@ def closeTwoColors(input_color): ###finds black or white pixel
 if __name__ == "__main__":
     global visualize 
     visualize = False
+    global brightnessValue
+    brightnessValue = 120
 
     main()
