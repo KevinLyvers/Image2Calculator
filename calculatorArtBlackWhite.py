@@ -106,7 +106,7 @@ def visualizer(input_array):
                 run = 0;
 
 def findLineHor(colorArray):
-    outputArray = [] ####in from [lines, type, data.......]
+    outputArray = [] ####in from [lines, data.......]
 
     lines=0
     for i in range(height):
@@ -128,7 +128,7 @@ def findLineHor(colorArray):
     return outputArray
 
 def findLineVert(colorArray):
-    outputArray = [] ####in from [lines, type, data.......]
+    outputArray = [] ####in from [lines, data.......]
 
     lines=0
     for i in range(width):
